@@ -28,19 +28,39 @@ Foundation is the most advanced responsive front-end framework in the world. Qui
 
 ## Run locally
 
-### Documentation
-
-To run the documentation locally on your machine, you need [Node.js](https://nodejs.org/en/) installed on your computer. (Your Node.js version must be a **minimum of 18**). Run these commands to set up the documentation:
+To work on Foundation locally, you need [Node.js](https://nodejs.org/en/) installed on your computer. Your Node.js version must be **18 or newer**.
 
 ```bash
 # Install
 git clone https://github.com/foundation/foundation-sites
 cd foundation-sites
 yarn
+```
 
-# Start the documentation
+### Documentation preview
+
+Use the default Gulp task when you want to work on the docs locally. This builds the docs into `_build/`, starts BrowserSync, and watches for changes.
+
+```bash
 yarn start
 ```
+
+### Build distributable files
+
+If you need the distributable framework assets, build the `dist/` folder instead of the docs preview:
+
+```bash
+# Build the docs site and framework files into _build/
+yarn build
+
+# Build the distributable CSS/JS bundles into dist/
+npx gulp deploy:dist
+npx gulp deploy:plugins
+```
+
+This produces the files you would ship from `dist/`, including compiled CSS, minified assets, sourcemaps, module bundles, and standalone plugins.
+
+If you are preparing an official release and also want to update versioned files and regenerate the settings file, use `yarn deploy:prep`. That command is interactive and prompts for the version number before rebuilding the release artifacts.
 
 ### Testing
 
