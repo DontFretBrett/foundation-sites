@@ -60,7 +60,33 @@ npx gulp deploy:plugins
 
 This produces the files you would ship from `dist/`, including compiled CSS, minified assets, sourcemaps, module bundles, and standalone plugins.
 
-If you are preparing an official release and also want to update versioned files and regenerate the settings file, use `yarn deploy:prep`. That command is interactive and prompts for the version number before rebuilding the release artifacts.
+Run `deploy:dist` and `deploy:plugins` as separate commands (not on one line). Gulp runs multiple CLI task names in parallel, and `deploy:plugins` needs the `_build/` output from `deploy:dist` first.
+
+### Version bump
+
+The current version is in `package.json` (for example `6.9.0`). Use [semantic versioning](https://semver.org/): patch `6.9.1`, minor `6.10.0`, major `7.0.0`.
+
+**Official release prep (maintainers)** — interactive prompt, versioned files, `dist/`, and regenerated `scss/settings/_settings.scss`:
+
+```bash
+yarn deploy:prep
+```
+
+Enter the new version when prompted. To publish a tagged release to GitHub (not npm), maintainers use `yarn deploy`, which also commits and tags.
+
+**Local bump + `dist/` only (forks, vendoring into your own sites)** — no commit, push, or npm publish required:
+
+1. Update the version string in every file listed in `gulp/config.js` under `VERSIONED_FILES` (`package.json`, `bower.json`, `composer.json`, `package.js`, `js/foundation.core.js`, `scss/foundation.scss`, `scss/settings/_settings.scss`, `docs/pages/installation.md`, `meteor-README.md`). A repo-wide replace of the old version (for example `6.9.0` → `6.10.0`) is fine.
+2. Rebuild distributables:
+
+```bash
+npx gulp deploy:dist
+npx gulp deploy:plugins
+```
+
+3. If you want to use the distribution locally instead of the npm package or a CDN, copy `dist/css` and `dist/js` into each site (for example `assets/vendor/foundation/`) and reference those files in your HTML. You still need [jQuery](https://jquery.com/) and [what-input](https://github.com/ncoden/what-input) separately; they are peer dependencies and are not bundled in `dist/`.
+
+Do **not** run `npx gulp deploy:prompt deploy:version` on one command line. Those tasks must run in series; passing both names starts them in parallel and can corrupt version fields. Use `yarn deploy:prep` for an interactive bump, or edit the versioned files yourself as in step 1.
 
 ### Testing
 

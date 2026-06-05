@@ -882,7 +882,13 @@ Abide.defaults = {
     // From CommonRegexJS (@talyssonoc)
     // https://github.com/talyssonoc/CommonRegexJS/blob/e2901b9f57222bc14069dc8f0598d5f412555411/lib/commonregex.js#L76
     // For more restrictive URL Regexs, see https://mathiasbynens.be/demo/url-regex.
-    url: /^((?:(https?|ftps?|file|ssh|sftp):\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))*\))+(?:\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?\xab\xbb\u201c\u201d\u2018\u2019]))$/,
+    url: function () {
+      var protocol = '(?:https?|ftps?|file|ssh|sftp):\\/\\/';
+      var www = 'www\\d{0,3}[.]';
+      var domain = '[a-z0-9.\\-]+[.][a-z]{2,4}\\/';
+      var body = '(?:[^\\s()<>]+|\\((?:[^\\s()<>]+|(?:\\([^\\s()<>]+\\)))*\\))+' + "(?:\\((?:[^\\s()<>]+|(?:\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?\\xab\\xbb\\u201c\\u201d\\u2018\\u2019])";
+      return new RegExp("^((?:".concat(protocol, "|").concat(www, "|").concat(domain, ")").concat(body, ")$"), 'i');
+    }(),
     // abc.de
     domain: /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,8}$/,
     datetime: /^([0-2][0-9]{3})\-([0-1][0-9])\-([0-3][0-9])T([0-5][0-9])\:([0-5][0-9])\:([0-5][0-9])(Z|([\-\+]([0-1][0-9])\:00))$/,
@@ -1768,7 +1774,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
 
 
-var FOUNDATION_VERSION = '6.9.0';
+var FOUNDATION_VERSION = '6.10.0';
 
 // Global Foundation object
 // This is attached to the window, or used as a module for AMD/Browserify

@@ -485,7 +485,7 @@ function parseStyleToObject(str) {
   return styleObject;
 }
 
-var FOUNDATION_VERSION = '6.9.0';
+var FOUNDATION_VERSION = '6.10.0';
 
 // Global Foundation object
 // This is attached to the window, or used as a module for AMD/Browserify
@@ -2745,8 +2745,15 @@ Abide.defaults = {
     // From CommonRegexJS (@talyssonoc)
     // https://github.com/talyssonoc/CommonRegexJS/blob/e2901b9f57222bc14069dc8f0598d5f412555411/lib/commonregex.js#L76
     // For more restrictive URL Regexs, see https://mathiasbynens.be/demo/url-regex.
-    url: /^((?:(https?|ftps?|file|ssh|sftp):\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))*\))+(?:\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?\xab\xbb\u201c\u201d\u2018\u2019]))$/,
-
+    url: (function() {
+      const protocol = '(?:https?|ftps?|file|ssh|sftp):\\/\\/';
+      const www      = 'www\\d{0,3}[.]';
+      const domain   = '[a-z0-9.\\-]+[.][a-z]{2,4}\\/';
+      const body = '(?:[^\\s()<>]+|\\((?:[^\\s()<>]+|(?:\\([^\\s()<>]+\\)))*\\))+' +
+                   '(?:\\((?:[^\\s()<>]+|(?:\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:\'".,<>?\\xab\\xbb\\u201c\\u201d\\u2018\\u2019])';
+      return new RegExp(`^((?:${protocol}|${www}|${domain})${body})$`, 'i');
+    })(),
+    
     // abc.de
     domain : /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,8}$/,
 

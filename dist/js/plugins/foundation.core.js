@@ -30,7 +30,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
 
 
-var FOUNDATION_VERSION = '6.9.0';
+var FOUNDATION_VERSION = '6.10.0';
 
 // Global Foundation object
 // This is attached to the window, or used as a module for AMD/Browserify
